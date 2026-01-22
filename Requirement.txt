@@ -7,6 +7,19 @@ langchain_community
 langchain-openai
 openai
 
+streamlit
+python-dotenv
+
+langchain
+langchain-core
+langchain-community
+langchain-huggingface
+
+huggingface-hub
+transformers
+
+pylint
+
 # Anthropic Integration
 langchain-anthropic
 
