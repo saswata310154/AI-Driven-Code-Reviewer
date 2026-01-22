@@ -21,22 +21,19 @@ def get_ai_suggestions(code_string: str) -> str:
     prompt = f"""
 You are a senior Python software engineer.
 
-Review the following code and provide 2–3 high-impact suggestions.
+TASK:
+- If the code has SYNTAX ERRORS, explain them clearly and show how to fix them.
+- If the code is VALID, give 2–3 high-impact improvements.
 
 CODE:
 {code_string}
 
-FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
-
-Robustness:
-- point with short example
-
-Readability:
-- point with short example
-
-Optimization:
-- point with short example
+FORMAT RULES:
+- Be precise
+- Do NOT give generic advice
+- Show corrected code snippets where applicable
 """
+
 
     try:
         response = model.invoke([
