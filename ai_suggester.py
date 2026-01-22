@@ -24,22 +24,29 @@ def get_ai_suggestions(code_string: str) -> str:
     - Plain text (string) suitable for direct display in Streamlit
     """
 
+   
     prompt = f"""
 You are a senior Python software engineer.
 
+RULES:
+- If the code is very small or already optimal, say so explicitly.
+- Do NOT repeat generic advice like "add docstrings" unless it truly adds value.
+- Be honest and concise.
+
 TASK:
-- If the code contains SYNTAX ERRORS, clearly explain each error
-  and show how to fix it.
-- If the code is VALID, provide 2–3 high-impact improvements.
+- If syntax errors exist, explain and fix them.
+- If the code is valid:
+    - Say whether the code is already optimal
+    - Suggest improvements ONLY if they are meaningful
 
 CODE:
 {code_string}
 
-RESPONSE RULES:
-- Be precise and professional
-- Avoid generic advice
-- Include short corrected code snippets where relevant
+FORMAT:
+- Use short bullet points
+- Include code snippets only if needed
 """
+
 
     try:
         response = model.invoke(
