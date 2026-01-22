@@ -26,26 +26,31 @@ def get_ai_suggestions(code_string: str) -> str:
 
    
     prompt = f"""
-You are a senior Python software engineer.
+You are a senior Python software engineer performing a professional code review.
 
-RULES:
-- If the code is very small or already optimal, say so explicitly.
-- Do NOT repeat generic advice like "add docstrings" unless it truly adds value.
-- Be honest and concise.
+IMPORTANT RULES:
+- If the code is already clean, small, and idiomatic, explicitly say:
+  "This code is already well-written and does not require changes."
+- Do NOT give generic advice unless it clearly improves the code.
+- Be honest and realistic, like a real senior reviewer.
 
 TASK:
-- If syntax errors exist, explain and fix them.
-- If the code is valid:
-    - Say whether the code is already optimal
-    - Suggest improvements ONLY if they are meaningful
+1. If SYNTAX ERRORS exist:
+   - Explain each error clearly
+   - Show corrected code
+
+2. If the code is VALID:
+   - First state whether the code is already optimal or not
+   - Only then suggest 1–3 **meaningful** improvements (if any)
 
 CODE:
 {code_string}
 
-FORMAT:
-- Use short bullet points
-- Include code snippets only if needed
+OUTPUT FORMAT:
+- Short bullet points
+- Include code snippets only if they add value
 """
+
 
 
     try:
