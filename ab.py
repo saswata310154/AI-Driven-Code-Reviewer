@@ -121,8 +121,22 @@ if analyze_btn and code:
             error_result = detect_errors(code)
             
             st.write("Generating AI insights...")
-            suggestions = get_ai_suggestions(code)
-            
+            st.write("🧪 Detecting issues")
+            error_result = detect_errors(code)
+
+# ✅ DEFINE issues HERE
+            issues = error_result.get("error_count", 0)
+
+            if issues > 0:
+                suggestions = (
+        "⚠️ Syntax errors detected.\n\n"
+        "Please fix the errors listed above before requesting AI improvements.\n"
+        "Once the code runs correctly, the AI can suggest optimizations, "
+        "readability improvements, and best practices."
+    )
+            else:
+                suggestions = get_ai_suggestions(code)
+
             status.update(label="Analysis Complete!", state="complete", expanded=False)
 
         # 2. Metrics Dashboard
