@@ -24,32 +24,33 @@ def get_ai_suggestions(code_string: str) -> str:
     - Plain text (string) suitable for direct display in Streamlit
     """
 
-   
     prompt = f"""
-You are a senior Python software engineer performing a professional code review.
+You are a senior Python software engineer doing a realistic code review.
 
-IMPORTANT RULES:
-- If the code is already clean, small, and idiomatic, explicitly say:
+VERY IMPORTANT RULES:
+- If the code is already clean, simple, and idiomatic, explicitly say:
   "This code is already well-written and does not require changes."
-- Do NOT give generic advice unless it clearly improves the code.
-- Be honest and realistic, like a real senior reviewer.
+- Do NOT give generic advice like docstrings or variable naming
+  unless it truly improves the code.
+- Be honest, concise, and practical.
 
-TASK:
-1. If SYNTAX ERRORS exist:
+REVIEW TASK:
+1. If there are SYNTAX ERRORS:
    - Explain each error clearly
    - Show corrected code
 
 2. If the code is VALID:
-   - First state whether the code is already optimal or not
-   - Only then suggest 1–3 **meaningful** improvements (if any)
+   - First state whether the code is already optimal
+   - Only then suggest 1–2 meaningful improvements (if any)
 
 CODE:
 {code_string}
 
 OUTPUT FORMAT:
 - Short bullet points
-- Include code snippets only if they add value
+- Code snippets only if they add real value
 """
+
 
 
 
