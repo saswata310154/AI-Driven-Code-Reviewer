@@ -1,8 +1,6 @@
 import os
 import requests
-from dotenv import load_dotenv
 
-load_dotenv()
 
 HF_API_URL = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-7B-Instruct"
 HF_TOKEN = os.getenv("HUGGINGFACE_ACCESS_TOKEN")
