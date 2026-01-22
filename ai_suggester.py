@@ -3,7 +3,13 @@ from langchain_core.messages import HumanMessage
 from dotenv import load_dotenv
 
 # Load environment variables (.env)
+import os
+
 load_dotenv()
+
+if not os.getenv("HUGGINGFACEHUB_API_TOKEN"):
+    raise RuntimeError("HuggingFace API token not found")
+
 
 # Initialize HuggingFace LLM endpoint
 llm = HuggingFaceEndpoint(
