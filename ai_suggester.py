@@ -1,18 +1,20 @@
 import os
-from huggingface_hub import InferenceClient
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize HF client
-client = InferenceClient(
-    model="Qwen/Qwen2.5-7B-Instruct",
-    token=os.getenv("HUGGINGFACE_ACCESS_TOKEN")
-)
+HF_API_URL = "https://api-inference.huggingface.co/models/Qwen/Qwen2.5-7B-Instruct"
+HF_TOKEN = os.getenv("HUGGINGFACE_ACCESS_TOKEN")
+
+HEADERS = {
+    "Authorization": f"Bearer {HF_TOKEN}",
+    "Content-Type": "application/json"
+}
 
 def analyze_code_with_ai(source_code: str):
 
-    review_prompt = f"""
+    prompt = f"""
 You are a senior Python engineer performing a professional code review.
 
 Analyze the following Python code and suggest improvements related to:
@@ -33,16 +35,34 @@ RESPONSE RULES:
 - Include a short code example for each suggestion
 """
 
+    payload = {
+        "inputs": prompt,
+        "parameters": {
+            "max_new_tokens": 800,
+            "temperature": 0.3
+        }
+    }
+
     try:
-        response = client.text_generation(
-            prompt=review_prompt,
-            max_new_tokens=800,
-            temperature=0.3
+        response = requests.post(
+            HF_API_URL,
+            headers=HEADERS,
+            json=payload,
+            timeout=60
         )
+        response.raise_for_status()
+
+        result = response.json()
+
+        # HF sometimes returns list or dict
+        if isinstance(result, list):
+            text = result[0].get("generated_text", "")
+        else:
+            text = result.get("generated_text", "")
 
         return [{
             "type": "AI_REVIEW",
-            "message": response.strip(),
+            "message": text.strip(),
             "severity": "INFO"
         }]
 
