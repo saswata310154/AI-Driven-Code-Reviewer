@@ -1,7 +1,7 @@
 import ast
 
 def parse_code(code_string):
-    
+    """ Parse python code into AST """
     try:
         tree = ast.parse(code_string)
         return{
