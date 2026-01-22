@@ -2,3 +2,15 @@
 .streamlit/secrets.toml
 venv/
 __pycache__/
+
+a.py
+chatbot.py
+chatmodel_google.py
+demo_ast_parse_unparse.py
+demo_nodeVisitor.py
+demo_nodeVisitor1.py
+demo.py
+embedding_google_query.py
+node_visitor.py
+prompt_ui.py
+test.py
