@@ -1,58 +1,34 @@
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from langchain_core.messages import HumanMessage
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
-# Initialize HuggingFace LLM
-hf_endpoint = HuggingFaceEndpoint(
+llm = HuggingFaceEndpoint(
     repo_id="Qwen/Qwen2.5-7B-Instruct",
     temperature=0.3,
-    max_new_tokens=1000
+    max_new_tokens=512
 )
 
-chat_model = ChatHuggingFace(llm=hf_endpoint)
+model = ChatHuggingFace(llm=llm)
 
 
-def get_ai_suggestions(code_string: str):
-    """
-    Generates AI-based review suggestions for Python code.
-    Focuses on robustness, readability, and optimization.
-    """
+def get_ai_suggestions(code_string):
+    prompt = f"""
+You are an expert Python code reviewer.
 
-    review_prompt = f"""
-    You are an experienced Python code reviewer.
+Analyze the following code and give:
+1. Errors
+2. Improvements
+3. Best practices
 
-    TASK:
-    Analyze the Python code below and suggest improvements.
+Code:
+{code_string}
+"""
 
-    CODE SNIPPET:
-    {code_string}
+    response = model.invoke([
+        HumanMessage(content=prompt)
+    ])
 
-    GUIDELINES:
-    - Give 2 to 3 concise suggestions only
-    - Categorize suggestions into:
-        • Robustness
-        • Readability
-        • Optimization
-    - Keep explanations short and practical
-    - Include minimal code examples where helpful
-    """
-
-    try:
-        response = chat_model.invoke(
-            [HumanMessage(content=review_prompt)]
-        )
-
-        return [{
-            "type": "AISuggestion",
-            "message": response.content,
-            "severity": "Info"
-        }]
-
-    except Exception as err:
-        return [{
-            "type": "Error",
-            "message": str(err),
-            "severity": "Info"
-        }]
+    return response.content

@@ -16,12 +16,16 @@ try:
     from error_detector import detect_errors
     from ai_suggester import get_ai_suggestions
 except ImportError:
-    # Mock functions (UI demo only)
+    # -------- MOCK FUNCTIONS (UI DEMO ONLY) --------
     def parse_code(code):
         return {"success": True}
 
     def show_style_corrected(code):
-        return {"success": True, "corrected_code": "# Auto-formatted Code\n" + code.replace("  ", "    ")}
+        return {
+            "success": True,
+            "corrected_code": "# Auto-formatted Code\n" + code.replace("  ", "    "),
+            "error": None
+        }
 
     def detect_errors(code):
         if "def" in code and ":" not in code:
@@ -36,11 +40,13 @@ except ImportError:
             }
         return {"success": True, "error_count": 0, "errors": []}
 
+    # IMPORTANT: mock returns STRING (same as real AI)
     def get_ai_suggestions(code):
-        return [{
-            "type": "AISuggestion",
-            "message": "Consider adding docstrings and meaningful variable names for better readability."
-        }]
+        return (
+            "Consider adding docstrings.\n"
+            "Use meaningful variable names.\n"
+            "Follow PEP8 best practices."
+        )
 
 # --- Custom UI Styling ---
 st.markdown("""
@@ -89,7 +95,7 @@ with left:
     code = st.text_area(
         "Paste your Python code below",
         height=460,
-        placeholder="def greet(name)\n    print(f'Hello {name}')"
+        placeholder="def greet(name):\n    print(f'Hello {name}')"
     )
 
     analyze_btn = st.button(
@@ -111,7 +117,7 @@ if analyze_btn and code:
 
         with st.status("Analyzing your code...", expanded=True) as status:
             st.write("🔍 Parsing syntax")
-            time.sleep(0.4)
+            time.sleep(0.3)
             parse_result = parse_code(code)
 
             if not parse_result["success"]:
@@ -143,6 +149,7 @@ if analyze_btn and code:
         ["🐞 Issues", "🎨 Formatting", "🤖 AI Feedback"]
     )
 
+    # ---- Issues Tab ----
     with tab1:
         if issues == 0:
             st.success("No issues detected. Your code looks clean!")
@@ -151,18 +158,21 @@ if analyze_btn and code:
                 st.warning(f"**{err.get('type')}** — {err.get('message')}")
                 st.info(f"💡 Fix: {err.get('suggestion')}")
 
+    # ---- Formatting Tab ----
     with tab2:
         style_result = show_style_corrected(code)
         if style_result.get("success"):
             st.code(style_result["corrected_code"], language="python")
-            st.button("📋 Copy Clean Code")
         else:
-            st.info("Code formatting already optimal.")
+            st.error(style_result.get("error"))
 
+    # ---- AI Feedback Tab (FIXED) ----
     with tab3:
-        for s in suggestions:
+        if suggestions:
             with st.chat_message("assistant"):
-                st.write_stream(stream_data(s.get("message", "")))
+                st.write_stream(stream_data(suggestions))
+        else:
+            st.info("No AI suggestions generated.")
 
 elif analyze_btn and not code:
     st.toast("⚠️ Please paste some Python code first", icon="⚠️")
