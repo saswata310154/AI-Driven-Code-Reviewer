@@ -4,52 +4,55 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-llm = HuggingFaceEndpoint(
-    repo_id='Qwen/Qwen2.5-7B-Instruct',
+# Initialize HuggingFace LLM
+hf_endpoint = HuggingFaceEndpoint(
+    repo_id="Qwen/Qwen2.5-7B-Instruct",
     temperature=0.3,
     max_new_tokens=1000
 )
 
-model = ChatHuggingFace(llm=llm)
+chat_model = ChatHuggingFace(llm=hf_endpoint)
 
 
-def get_ai_suggestions(code_string):
+def get_ai_suggestions(code_string: str):
     """
-    WHAT IT DOES: Asks AI improvements ideas
+    Generates AI-based review suggestions for Python code.
+    Focuses on robustness, readability, and optimization.
     """
-    prompt = f"""
-    Act as an expert Python Senior Software Engineer. 
-    Review the following code for logic, efficiency, and best practices:
 
-    CODE:
+    review_prompt = f"""
+    You are an experienced Python code reviewer.
+
+    TASK:
+    Analyze the Python code below and suggest improvements.
+
+    CODE SNIPPET:
     {code_string}
 
-    INSTRUCTIONS:
-    Provide exactly 2-3 high-impact suggestions. 
-    Structure your response using these specific categories:
-    1. **Robustness**: How to prevent crashes or handle edge cases.
-    2. **Readability**: How to make the code more "Pythonic" (PEP 8).
-    3. **Optimization**: How to improve performance or simplify logic.
-
-    Keep each point brief, professional, and include a small code example of the fix.
+    GUIDELINES:
+    - Give 2 to 3 concise suggestions only
+    - Categorize suggestions into:
+        • Robustness
+        • Readability
+        • Optimization
+    - Keep explanations short and practical
+    - Include minimal code examples where helpful
     """
 
-    try: 
-        response = model.invoke(
-            [HumanMessage(content=prompt)]
+    try:
+        response = chat_model.invoke(
+            [HumanMessage(content=review_prompt)]
         )
-
-        ai_message = response.content
-        print(ai_message)
 
         return [{
             "type": "AISuggestion",
-            "message": ai_message,
+            "message": response.content,
             "severity": "Info"
         }]
-    except Exception as e:
+
+    except Exception as err:
         return [{
             "type": "Error",
-            "message": e,
+            "message": str(err),
             "severity": "Info"
         }]
