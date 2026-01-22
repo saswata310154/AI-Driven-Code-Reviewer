@@ -84,7 +84,7 @@ with tab1:
                     suggestions = analyze_code_with_ai(code)
 
                     for suggestion in suggestions:
-                        if suggestion["type"] == "AISuggestion":
+                        if suggestion["type"] == "AI_REVIEW":
                             with st.chat_message("assistant"):
                                 st.write_stream(stream_data(suggestion["message"]))
                             
