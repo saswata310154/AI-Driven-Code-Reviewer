@@ -5,51 +5,45 @@ from dotenv import load_dotenv
 load_dotenv()
 
 llm = HuggingFaceEndpoint(
-    repo_id='Qwen/Qwen2.5-7B-Instruct',
+    repo_id="Qwen/Qwen2.5-7B-Instruct",
     temperature=0.3,
-    max_new_tokens=1000
+    max_new_tokens=700
 )
 
 model = ChatHuggingFace(llm=llm)
 
 
-def get_ai_suggestions(code_string):
+def get_ai_suggestions(code_string: str) -> str:
     """
-    WHAT IT DOES: Asks AI improvements ideas
+    Asks AI for improvement suggestions and RETURNS PLAIN TEXT
     """
+
     prompt = f"""
-    Act as an expert Python Senior Software Engineer. 
-    Review the following code for logic, efficiency, and best practices:
+You are a senior Python software engineer.
 
-    CODE:
-    {code_string}
+Review the following code and provide 2–3 high-impact suggestions.
 
-    INSTRUCTIONS:
-    Provide exactly 2-3 high-impact suggestions. 
-    Structure your response using these specific categories:
-    1. **Robustness**: How to prevent crashes or handle edge cases.
-    2. **Readability**: How to make the code more "Pythonic" (PEP 8).
-    3. **Optimization**: How to improve performance or simplify logic.
+CODE:
+{code_string}
 
-    Keep each point brief, professional, and include a small code example of the fix.
-    """
+FORMAT YOUR RESPONSE EXACTLY LIKE THIS:
 
-    try: 
-        response = model.invoke(
-            [HumanMessage(content=prompt)]
-        )
+Robustness:
+- point with short example
 
-        ai_message = response.content
-        print(ai_message)
+Readability:
+- point with short example
 
-        return [{
-            "type": "AISuggestion",
-            "message": ai_message,
-            "severity": "Info"
-        }]
+Optimization:
+- point with short example
+"""
+
+    try:
+        response = model.invoke([
+            HumanMessage(content=prompt)
+        ])
+
+        return response.content.strip()
+
     except Exception as e:
-        return [{
-            "type": "Error",
-            "message": e,
-            "severity": "Info"
-        }]
+        return f"AI Error: {str(e)}"
