@@ -2,17 +2,16 @@ import streamlit as st
 import time
 
 # -------------------------------------------------
-# Page Configuration (NO sidebar)
+# Page Config
 # -------------------------------------------------
 st.set_page_config(
     page_title="AI Python Code Reviewer",
     page_icon="🧠",
-    layout="wide",
-    initial_sidebar_state="collapsed"
+    layout="wide"
 )
 
 # -------------------------------------------------
-# Imports with fallback (UNCHANGED LOGIC)
+# Imports (UNCHANGED)
 # -------------------------------------------------
 try:
     from code_parser import parse_code
@@ -20,100 +19,104 @@ try:
     from error_detector import detect_errors
     from ai_suggester import get_ai_suggestions
 except ImportError:
-    def parse_code(code):
-        return {"success": True}
-
+    def parse_code(code): return {"success": True}
     def show_style_corrected(code):
-        return {
-            "success": True,
-            "corrected_code": "# PEP8 Corrected\n" + code.replace("  ", "    ")
-        }
-
+        return {"success": True, "corrected_code": code}
     def detect_errors(code):
         return {"success": True, "error_count": 0, "errors": []}
-
     def get_ai_suggestions(code):
         return "AI suggestions unavailable."
 
 # -------------------------------------------------
-# Global Dark Theme Styling (CUSTOM, UNIQUE)
+# READABLE DARK THEME (FIXED CONTRAST)
 # -------------------------------------------------
 st.markdown("""
 <style>
 
-/* ---- App Background ---- */
+/* ===== Base ===== */
 html, body, [data-testid="stApp"] {
-    background-color: #0f172a;
+    background-color: #0b1220;
     color: #e5e7eb;
 }
 
-/* ---- Headings ---- */
+/* ===== Headers ===== */
 h1, h2, h3 {
-    color: #f8fafc;
+    color: #f9fafb;
 }
 
-/* ---- Text Area ---- */
+/* ===== Text Area ===== */
 .stTextArea textarea {
     background-color: #020617;
-    color: #e5e7eb;
+    color: #f8fafc;
     border: 1px solid #334155;
     font-family: Consolas, monospace;
 }
 
-/* ---- Buttons ---- */
-div.stButton > button {
+/* ===== Buttons ===== */
+.stButton button {
     background: linear-gradient(90deg, #2563eb, #4f46e5);
-    color: white;
+    color: #ffffff;
     border-radius: 10px;
     border: none;
-    height: 3rem;
     font-weight: 600;
 }
 
-/* ---- Status Box ---- */
-[data-testid="stStatusWidget"] {
+/* ===== Analysis Cards ===== */
+.analysis-card {
     background-color: #020617;
     border: 1px solid #1e293b;
-    border-radius: 10px;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
-/* ---- Metrics ---- */
+/* ===== Metrics ===== */
 [data-testid="stMetric"] {
     background-color: #020617;
     border-radius: 10px;
     padding: 1rem;
 }
 
-/* ---- Tabs ---- */
+/* ===== Tabs ===== */
 button[data-baseweb="tab"] {
-    color: #cbd5f5;
+    color: #c7d2fe;
 }
 button[data-baseweb="tab"][aria-selected="true"] {
     color: #ffffff;
-    border-bottom: 2px solid #6366f1;
+    border-bottom: 3px solid #6366f1;
 }
 
-/* ---- Code Blocks ---- */
+/* ===== Code Blocks (IMPORTANT FIX) ===== */
 pre {
     background-color: #020617 !important;
+    color: #e5e7eb !important;
     border-radius: 10px;
     border: 1px solid #1e293b;
+    padding: 1rem;
 }
 
-/* ---- Footer removal ---- */
+/* ===== AI Chat ===== */
+[data-testid="stChatMessage"] {
+    background-color: #020617;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+/* ===== Remove Footer ===== */
 footer {visibility: hidden;}
 
 </style>
 """, unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Header Section (NEW)
+# Header
 # -------------------------------------------------
 st.markdown("""
-<div style="text-align:center; padding:1.5rem 0;">
+<div style="text-align:center; padding:1.2rem 0;">
     <h1>🧠 AI Python Code Reviewer</h1>
-    <p style="color:#94a3b8; font-size:1.05rem;">
-        Static analysis • PEP8 formatting • AI-powered insights
+    <p style="color:#94a3b8;">
+        Bug detection • Style correction • AI-powered insights
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -121,15 +124,15 @@ st.markdown("""
 # -------------------------------------------------
 # Layout
 # -------------------------------------------------
-col_input, col_output = st.columns([1.1, 1])
+col_input, col_output = st.columns([1.15, 1])
 
 # -------------------------------------------------
-# Input Section
+# Input
 # -------------------------------------------------
 with col_input:
     st.subheader("📥 Code Input")
     code = st.text_area(
-        "Paste Python code below",
+        "Paste Python code",
         height=450,
         placeholder="def hello():\n    print('Hello World')",
         label_visibility="collapsed"
@@ -145,14 +148,15 @@ def stream_data(text):
         time.sleep(0.02)
 
 # -------------------------------------------------
-# Processing Logic (UNCHANGED)
+# Processing (UNCHANGED LOGIC)
 # -------------------------------------------------
 if analyze_btn and code:
     with col_output:
         st.subheader("📊 Analysis Report")
 
+        st.markdown('<div class="analysis-card">', unsafe_allow_html=True)
         with st.status("Running analysis pipeline...", expanded=True) as status:
-            st.write("• Parsing Python syntax")
+            st.write("✔ Parsing Python syntax")
             parse_result = parse_code(code)
 
             if not parse_result["success"]:
@@ -160,25 +164,25 @@ if analyze_btn and code:
                 st.error("Invalid Python syntax.")
                 st.stop()
 
-            st.write("• Detecting logical issues")
+            st.write("✔ Detecting logical issues")
             error_result = detect_errors(code)
             issues = error_result.get("error_count", 0)
 
             if issues > 0:
                 suggestions = (
-                    "⚠️ Fix the detected errors before requesting AI improvements.\n\n"
-                    "Once corrected, AI will provide:\n"
+                    "Fix detected errors before requesting AI improvements.\n\n"
+                    "AI suggestions will include:\n"
                     "- Readability improvements\n"
                     "- Optimization tips\n"
                     "- Best practices"
                 )
             else:
-                st.write("• Generating AI insights")
+                st.write("✔ Generating AI insights")
                 suggestions = get_ai_suggestions(code)
 
             status.update(label="Analysis Completed", state="complete")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-        # ---- Metrics (Style Score REMOVED) ----
         m1, m2 = st.columns(2)
         m1.metric("Lines of Code", len(code.split("\n")))
         m2.metric("Issues Detected", issues)
@@ -186,7 +190,7 @@ if analyze_btn and code:
         st.divider()
 
     # -------------------------------------------------
-    # Tabs Section
+    # Tabs
     # -------------------------------------------------
     tab_errors, tab_style, tab_ai = st.tabs(
         ["🐞 Bugs & Errors", "🎨 Style Fixes", "🤖 AI Advice"]
@@ -195,3 +199,34 @@ if analyze_btn and code:
     with tab_errors:
         if issues == 0:
             st.success("No bugs or errors detected.")
+        else:
+            for err in error_result.get("errors", []):
+                st.warning(f"{err.get('type')}: {err.get('message')}")
+                st.info(f"Fix: {err.get('suggestion')}")
+
+    with tab_style:
+        style_result = show_style_corrected(code)
+        if style_result.get("success"):
+            st.code(style_result["corrected_code"], language="python")
+        else:
+            st.info("No formatting changes required.")
+
+    with tab_ai:
+        if suggestions:
+            with st.chat_message("assistant"):
+                st.write_stream(stream_data(suggestions))
+        else:
+            st.info("No AI advice available.")
+
+elif analyze_btn and not code:
+    st.toast("Please paste some code to analyze.", icon="⚠️")
+
+else:
+    with col_output:
+        st.info("Waiting for Python code input…")
+        st.markdown("""
+        **Features**
+        - Syntax & logical error detection
+        - PEP8 style correction
+        - AI-powered review suggestions
+        """)
