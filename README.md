@@ -23,7 +23,7 @@ The goal of this project is to **automate the code review process** and deliver 
 ## 🌍 Live Application
 
 Try the deployed version here:  
-👉 **https://ai-driven-code-reviewer.streamlit.app/**
+👉 **https://ai-driven-code-reviewer-saswata-sarkar.streamlit.app/**
 
 ---
 
