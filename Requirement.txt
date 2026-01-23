@@ -1,33 +1,14 @@
-# LangChain Core
+streamlit
+
+# LangChain core
 langchain
 langchain-core
-langchain_community
+langchain-community
 
-# OpenAI Integration
-langchain-openai
-openai
-
-# Anthropic Integration
-langchain-anthropic
-
-# Google Gemini (PaLM) Integration
-langchain-google-genai
-google-generativeai
-
-# Hugging Face Integration
+# Hugging Face integration
 langchain-huggingface
-langchain-huggingface
-transformers
 huggingface-hub
-sentence-transformers
-# Environment Variable Management
-python-dotenv
+transformers
 
-# Machine Learning Utilities
-numpy
-scikit-learn
-
-#Pytorch  --If asked to install when run the open source model from huggingface. 
+# Torch (CPU only, Streamlit Cloud compatible)
 torch
-torchvision
-torchaudio
