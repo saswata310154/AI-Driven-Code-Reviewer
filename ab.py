@@ -5,7 +5,7 @@ import time
 # Page Config
 # -------------------------------------------------
 st.set_page_config(
-    page_title="AI Python Code Reviewer",
+    page_title="AI Driven Python Code Reviewer",
     page_icon="🧠",
     layout="wide"
 )
@@ -28,82 +28,87 @@ except ImportError:
         return "AI suggestions unavailable."
 
 # -------------------------------------------------
-# READABLE DARK THEME (FIXED CONTRAST)
+# SEMI-DARK, HIGH-READABILITY THEME
 # -------------------------------------------------
 st.markdown("""
 <style>
 
 /* ===== Base ===== */
 html, body, [data-testid="stApp"] {
-    background-color: #0b1220;
-    color: #e5e7eb;
+    background-color: #1e293b;   /* slate */
+    color: #e5e7eb;              /* soft white */
 }
 
-/* ===== Headers ===== */
+/* ===== Headings ===== */
 h1, h2, h3 {
-    color: #f9fafb;
+    color: #f8fafc;
 }
 
 /* ===== Text Area ===== */
 .stTextArea textarea {
-    background-color: #020617;
-    color: #f8fafc;
-    border: 1px solid #334155;
+    background-color: #f8fafc;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
     font-family: Consolas, monospace;
 }
 
 /* ===== Buttons ===== */
 .stButton button {
-    background: linear-gradient(90deg, #2563eb, #4f46e5);
+    background: linear-gradient(90deg, #3b82f6, #6366f1);
     color: #ffffff;
     border-radius: 10px;
     border: none;
     font-weight: 600;
 }
 
-/* ===== Analysis Cards ===== */
-.analysis-card {
-    background-color: #020617;
-    border: 1px solid #1e293b;
-    border-radius: 12px;
+/* ===== Cards ===== */
+.card {
+    background-color: #334155;
+    border-radius: 14px;
     padding: 1rem;
     margin-bottom: 1rem;
 }
 
 /* ===== Metrics ===== */
 [data-testid="stMetric"] {
-    background-color: #020617;
-    border-radius: 10px;
+    background-color: #334155;
+    border-radius: 12px;
     padding: 1rem;
 }
 
 /* ===== Tabs ===== */
 button[data-baseweb="tab"] {
-    color: #c7d2fe;
+    color: #cbd5e1;
 }
 button[data-baseweb="tab"][aria-selected="true"] {
     color: #ffffff;
-    border-bottom: 3px solid #6366f1;
+    border-bottom: 3px solid #93c5fd;
 }
 
-/* ===== Code Blocks (IMPORTANT FIX) ===== */
+/* ===== Code Blocks (VERY IMPORTANT FIX) ===== */
 pre {
-    background-color: #020617 !important;
-    color: #e5e7eb !important;
-    border-radius: 10px;
-    border: 1px solid #1e293b;
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
     padding: 1rem;
 }
 
 /* ===== AI Chat ===== */
 [data-testid="stChatMessage"] {
-    background-color: #020617;
-    border: 1px solid #1e293b;
-    border-radius: 12px;
+    background-color: #475569;
+    color: #f8fafc;
+    border-radius: 14px;
     padding: 1rem;
 }
 
-/* ===== Remove Footer ===== */
+/* ===== Status Widget ===== */
+[data-testid="stStatusWidget"] {
+    background-color: #334155;
+    border-radius: 14px;
+}
+
+/* ===== Footer ===== */
 footer {visibility: hidden;}
 
 </style>
@@ -114,8 +119,8 @@ footer {visibility: hidden;}
 # -------------------------------------------------
 st.markdown("""
 <div style="text-align:center; padding:1.2rem 0;">
-    <h1>🧠 AI Python Code Reviewer</h1>
-    <p style="color:#94a3b8;">
+    <h1>🧠 AI Driven Python Code Reviewer</h1>
+    <p style="color:#cbd5e1;">
         Bug detection • Style correction • AI-powered insights
     </p>
 </div>
@@ -148,15 +153,15 @@ def stream_data(text):
         time.sleep(0.02)
 
 # -------------------------------------------------
-# Processing (UNCHANGED LOGIC)
+# Processing (UNCHANGED)
 # -------------------------------------------------
 if analyze_btn and code:
     with col_output:
         st.subheader("📊 Analysis Report")
 
-        st.markdown('<div class="analysis-card">', unsafe_allow_html=True)
+        st.markdown('<div class="card">', unsafe_allow_html=True)
         with st.status("Running analysis pipeline...", expanded=True) as status:
-            st.write("✔ Parsing Python syntax")
+            st.write("Parsing Python syntax")
             parse_result = parse_code(code)
 
             if not parse_result["success"]:
@@ -164,7 +169,7 @@ if analyze_btn and code:
                 st.error("Invalid Python syntax.")
                 st.stop()
 
-            st.write("✔ Detecting logical issues")
+            st.write("Detecting logical issues")
             error_result = detect_errors(code)
             issues = error_result.get("error_count", 0)
 
@@ -177,7 +182,7 @@ if analyze_btn and code:
                     "- Best practices"
                 )
             else:
-                st.write("✔ Generating AI insights")
+                st.write("Generating AI insights")
                 suggestions = get_ai_suggestions(code)
 
             status.update(label="Analysis Completed", state="complete")
