@@ -1,18 +1,14 @@
 import streamlit as st
 import time
 
-# -------------------------------------------------
-# Page Config
-# -------------------------------------------------
+
 st.set_page_config(
     page_title="AI Driven Python Code Reviewer",
     page_icon="🧠",
     layout="wide"
 )
 
-# -------------------------------------------------
-# Imports (UNCHANGED)
-# -------------------------------------------------
+
 try:
     from code_parser import parse_code
     from style_checker import show_style_corrected
@@ -27,9 +23,7 @@ except ImportError:
     def get_ai_suggestions(code):
         return "AI suggestions unavailable."
 
-# -------------------------------------------------
-# SEMI-DARK, HIGH-READABILITY THEME
-# -------------------------------------------------
+
 st.markdown("""
 <style>
 
@@ -114,9 +108,6 @@ footer {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
-# -------------------------------------------------
-# Header
-# -------------------------------------------------
 st.markdown("""
 <div style="text-align:center; padding:1.2rem 0;">
     <h1>🧠 AI Driven Python Code Reviewer</h1>
@@ -126,14 +117,10 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# -------------------------------------------------
-# Layout
-# -------------------------------------------------
+
 col_input, col_output = st.columns([1.15, 1])
 
-# -------------------------------------------------
-# Input
-# -------------------------------------------------
+
 with col_input:
     st.subheader("📥 Code Input")
     code = st.text_area(
@@ -144,17 +131,13 @@ with col_input:
     )
     analyze_btn = st.button("🚀 Analyze Code", use_container_width=True)
 
-# -------------------------------------------------
-# Typewriter Effect (UNCHANGED)
-# -------------------------------------------------
+
 def stream_data(text):
     for word in text.split(" "):
         yield word + " "
         time.sleep(0.02)
 
-# -------------------------------------------------
-# Processing (UNCHANGED)
-# -------------------------------------------------
+
 if analyze_btn and code:
     with col_output:
         st.subheader("📊 Analysis Report")
@@ -194,9 +177,7 @@ if analyze_btn and code:
 
         st.divider()
 
-    # -------------------------------------------------
-    # Tabs
-    # -------------------------------------------------
+    
     tab_errors, tab_style, tab_ai = st.tabs(
         ["🐞 Bugs & Errors", "🎨 Style Fixes", "🤖 AI Advice"]
     )
