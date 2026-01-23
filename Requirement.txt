@@ -16,6 +16,7 @@ google-generativeai
 
 # Hugging Face Integration
 langchain-huggingface
+langchain-huggingface
 transformers
 huggingface-hub
 sentence-transformers
