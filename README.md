@@ -2,61 +2,117 @@
 
 ![Project Logo](logo.png)
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ai-driven-code-reviewer.streamlit.app/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org)
-
 > **An intelligent web application that reviews Python code, detects issues, and suggests improvements using AI.**  
-> Developed as part of the *Infosys Springboard Virtual Internship Program*.
+> Developed as part of the **Infosys Springboard Virtual Internship Program**.
 
 ---
 
-## 📌 Overview
+## 📌 Project Overview
 
-**AI-Powered Code Reviewer** is a web-based tool designed to help developers write cleaner, more efficient Python code.  
-The application performs static analysis, detects errors, checks coding standards, and provides AI-generated recommendations using a large language model.
+**AI-Powered Code Reviewer** is a web-based application that helps developers and students improve their Python code quality.  
+It automates the code review process by combining **static code analysis** with **AI-powered recommendations**.
 
-The goal of this project is to **automate the code review process** and deliver quick, meaningful feedback to developers and students.
+The system analyzes user-submitted Python code, detects errors, checks PEP-8 style compliance, and provides intelligent suggestions using a **Large Language Model (LLM)**.
+
+This tool is especially useful for:
+- Beginners learning Python
+- Students working on assignments
+- Developers looking for quick code reviews
+- Educators demonstrating clean coding practices
 
 ---
 
 ## 🌍 Live Application
 
-Try the deployed version here:  
+🚀 Try the deployed application here:  
 👉 **https://ai-driven-code-reviewer-saswata-sarkar.streamlit.app/**
 
 ---
 
-## ✨ Features
+## ✨ Key Features
 
-- 🔎 **Code Structure Analysis** using Abstract Syntax Trees (AST)
-- 🐞 **Error Detection** for syntax and common logical issues
-- 🎯 **PEP-8 Style Validation** for clean and readable code
-- 🧠 **AI-Based Suggestions** powered by Qwen 2.5 LLM
-- 💬 **Interactive Chat Interface** to ask questions about your code
-- 📊 **AST Visualization** for better understanding of code flow
+### 🔎 Static Code Analysis
+- Parses Python code using **Abstract Syntax Trees (AST)**
+- Validates code structure before deeper analysis
+
+### 🐞 Error Detection
+- Identifies syntax errors
+- Detects common logical mistakes
+- Provides clear explanations and fixes
+
+### 🎯 PEP-8 Style Checking
+- Enforces Python coding standards
+- Displays corrected, formatted code
+- Improves readability and maintainability
+
+### 🧠 AI-Powered Suggestions
+- Uses **Qwen 2.5 (7B Instruct)** LLM via Hugging Face
+- Provides meaningful, non-generic feedback
+- Suggests optimizations and best practices
+
+### 💬 Interactive AI Review
+- AI responses displayed in a chat-style interface
+- Streaming output for better user experience
+
+### 📊 AST-Based Architecture
+- Backend logic built around AST parsing
+- Ensures safe and reliable static analysis before AI inference
 
 ---
 
 ## 🧰 Technology Stack
 
-- **Language**: Python 3.11  
-- **Frontend**: Streamlit  
-- **AI Model**: Qwen/Qwen2.5-7B-Instruct (Hugging Face API)  
-- **Code Analysis**: Python AST, Pylint  
-- **Version Control**: Git & GitHub  
+### 🖥️ Frontend
+- **Streamlit** – interactive UI and deployment
+
+### ⚙️ Backend & Analysis
+- **Python 3.11**
+- **AST (Abstract Syntax Tree)** for parsing
+- **Custom static analyzers** for errors and style checks
+
+### 🧠 Artificial Intelligence
+- **Model**: Qwen/Qwen2.5-7B-Instruct  
+- **Platform**: Hugging Face Inference API  
+- **Integration**: LangChain (HuggingFaceEndpoint)
+
+### 🔐 Deployment & DevOps
+- **Streamlit Cloud**
+- **Git & GitHub** for version control
+- Secure API key handling using `st.secrets`
 
 ---
 
-## 📁 Repository Layout
+## 🏗️ System Architecture
+
+```text
+User Code Input
+        │
+        ▼
+AST Parser (code_parser.py)
+        │
+        ▼
+Static Error Detector (error_detector.py)
+        │
+        ▼
+Style Checker (style_checker.py)
+        │
+        ▼
+AI Suggestion Engine (ai_suggester.py)
+        │
+        ▼
+Streamlit UI (app.py)
+---
+
+## 📁 Repository Structure
 
 ```text
 AI-Driven-Code-Reviewer/
 ├── app.py                  # Streamlit application entry point
-├── chatbot.py              # AI chatbot logic
-├── ai_suggester.py         # LLM integration module
+├── ai_suggester.py         # AI / LLM integration module
 ├── code_parser.py          # AST parsing utilities
-├── error_detector.py       # Static error detection
-├── style_checker.py        # PEP-8 style checks
+├── error_detector.py       # Static error detection logic
+├── style_checker.py        # PEP-8 style checking module
+├── chatbot.py              # AI chat utilities
 ├── requirements.txt        # Project dependencies
-└── logo.png                # Application logo
+├── logo.png                # Application logo
+└── README.md               # Project documentation
