@@ -14,3 +14,6 @@ embedding_google_query.py
 node_visitor.py
 prompt_ui.py
 test.py
+
+.streamlit/config.toml
+
