@@ -1,14 +1,11 @@
 streamlit
 
-# LangChain core
 langchain
 langchain-core
 langchain-community
 
-# Hugging Face integration
 langchain-huggingface
 huggingface-hub
 transformers
 
-# Torch (CPU only, Streamlit Cloud compatible)
 torch
