@@ -60,6 +60,7 @@ This tool is especially useful for:
 
 ---
 
+
 ## 🧰 Technology Stack
 
 ### 🖥️ Frontend
@@ -81,6 +82,20 @@ This tool is especially useful for:
 - Secure API key handling using `st.secrets`
 
 ---
+## 📁 Repository Structure
+
+```text
+AI-Driven-Code-Reviewer/
+├── ab.py                  # Streamlit application entry point
+├── ai_suggester.py         # AI / LLM integration module
+├── code_parser.py          # AST parsing utilities
+├── error_detector.py       # Static error detection logic
+├── style_checker.py        # PEP-8 style checking module
+├── chatbot.py              # AI chat utilities
+├── requirements.txt        # Project dependencies
+├── logo.png                # Application logo
+└── README.md               # Project documentation
+---
 
 ## 🏗️ System Architecture
 
@@ -100,19 +115,6 @@ Style Checker (style_checker.py)
 AI Suggestion Engine (ai_suggester.py)
         │
         ▼
-Streamlit UI (app.py)
----
+Streamlit UI (ab.py)
 
-## 📁 Repository Structure
-
-```text
-AI-Driven-Code-Reviewer/
-├── app.py                  # Streamlit application entry point
-├── ai_suggester.py         # AI / LLM integration module
-├── code_parser.py          # AST parsing utilities
-├── error_detector.py       # Static error detection logic
-├── style_checker.py        # PEP-8 style checking module
-├── chatbot.py              # AI chat utilities
-├── requirements.txt        # Project dependencies
-├── logo.png                # Application logo
-└── README.md               # Project documentation
+--
